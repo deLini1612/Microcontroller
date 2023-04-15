@@ -77,8 +77,8 @@ To use toolchain, you will need to update your ```PATH``` environment variable.
     ```
 2. Run those command:
     ```
-    $ export MDK=/home/nplink/Documents/VXL/mdk    # Points to MDK directory
-    $ export ARCH=esp32c3         # Valid choices: esp32 esp32c3
+    export MDK=/home/nplink/Documents/VXL/mdk    # Points to MDK directory
+    export ARCH=esp32c3         # Valid choices: esp32 esp32c3
     ```
 
 ---
