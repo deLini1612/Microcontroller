@@ -1,1 +1,0 @@
-4. Bonus: Tìm hiểu về dẫn hướng biên dịch -c, -s, và phần mềm risv32-esp-elf-nm. Thực hienj lại các bước: biên dịch .c -> .asm -> .o -> .elf -> .bin (không dùng makefile) (5)
