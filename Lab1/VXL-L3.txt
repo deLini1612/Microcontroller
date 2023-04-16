@@ -4,7 +4,10 @@
 .text -> ma lenh chuong trinh
 tu dong 48 -> chi ra cac ham (va vi tri luu)
 bsp (board support package) -> dc cung cap vao trong mdk.h (trong TH nay)
---> dinh nghia dia chi cua cac thanh ghi giao dien vao ra, các hằng số, cung cấp một số hàm (vd hàm lặp lại lệnh loop, hàm làm delay, hàm để init cái SoC (MCU) --> thực ra là implement cái được ghi trong datasheet; định nghĩa ngoại vi (các LED,..)...)
+--> dinh nghia dia chi cua cac thanh ghi giao dien vao ra, các hằng số, 
+cung cấp một số hàm (vd hàm lặp lại lệnh loop, hàm làm delay, hàm để init
+ cái SoC (MCU) --> thực ra là implement cái được ghi trong datasheet;
+  định nghĩa ngoại vi (các LED,..)...)
 
 Nhắc lại: Khái niệm toolchain (cần tìm tool chain); linker script (chứa thông tin về memory map); bsp (chứa các hàm, địa chỉ của thanh ghi I/O)
 
@@ -76,4 +79,3 @@ Debug tool (dùng oscillo)
 
 
 ---------------------------------------
-b
