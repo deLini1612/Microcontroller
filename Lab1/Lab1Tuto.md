@@ -30,8 +30,9 @@ Lab 01: Blinky
   - [`gpio_output(int pin)` function](#gpio_outputint-pin-function)
     - [1. `REG(C3_GPIO)[GPIO_OUT_FUNC + pin] = BIT(9) | 128`](#1-regc3_gpiogpio_out_func--pin--bit9--128)
     - [2. `gpio_output_enable(pin, 1)`](#2-gpio_output_enablepin-1)
-  - [`wdt_disable()` function](#wdt_disable-function)
+    - [**3. Conclusion**](#3-conclusion)
   - [`gpio_write(int pin, bool value)` function](#gpio_writeint-pin-bool-value-function)
+    - [**3. Conclusion**](#3-conclusion-1)
 - [Why need to add `wdt_disable()`](#why-need-to-add-wdt_disable)
 - [Result](#result)
   - [Toolchain path](#toolchain-path)
@@ -131,7 +132,7 @@ static inline void gpio_output(int pin) {
 }
 ```
 ### 1. `REG(C3_GPIO)[GPIO_OUT_FUNC + pin] = BIT(9) | 128`   
-- `GPIO_OUT_FUNC` is defined as `341` in line 59
+- `GPIO_OUT_FUNC` is defined as `341` in line 59, 341 register = 1364 bytes = 0x0554
 - `C3_GPIO` is defined as `0x60004000` in line 34 (it also the low **boundary address of GPIO** [page 90 technical reference manual])
 - `REG(x)` is defined in line 14, and let's take it take it one step at the time:
   ```c
@@ -148,8 +149,11 @@ static inline void gpio_output(int pin) {
     > What happens in this command is 1U (unsigned value 1) is shifted to the left by x bits, so its value is 2^x
 
 ***In a nutshell:*** 
-- `REG(C3_GPIO)[GPIO_OUT_FUNC + pin] = BIT(9) | 128`  equals `((volatile uint32_t *) (0x60004000))[341 + pin] = ((uint32_t) 1U << (9)) | 128`
-- It means 0000 0000 0000 0000 0000 0010 0000 0000 | 0000 0000 0000 0000 0000 0000 1000 0000 = 0x00000200 | 0x00000080 = 0000 0000 0000 0000 0000 0010 1000 0000 = 0x00000280
+- `REG(C3_GPIO)[GPIO_OUT_FUNC + pin]` will have base address is **0x60004000** (C3_GPIO) and offset address is (0x0554+4\*pin). So `REG(C3_GPIO)[GPIO_OUT_FUNC + pin]` is `GPIO_FUNCn_OUT_SEL_CFG_REG` (n = pin) means configuration register for GPIO*n* output [table in page 168 of technical reference manual].
+- `REG(C3_GPIO)[GPIO_OUT_FUNC + pin] = BIT(9) | 128` means set the `GPIO_FUNCn_OUT_SEL_CFG_REG` to 00000000 00000000 00000010 10000000 (9th and 7th bit is 1, others bit is 0)
+- Check *Register 5.18* in page 176 of technical reference manual for `GPIO_FUNCn_OUT_SEL_CFG_REG`:
+  - [7:0] bit = 10000000: the peripheral output signal 128 will be connected to GPIO output n
+  - 9th bit = 1: force the output enable signal to be sourced from bit n of `GPIO_ENABLE_REG` (which can be enable by `gpio_output_enable(pin, 1)` command)
 
 ### 2. `gpio_output_enable(pin, 1)`
 From line 125-128, we have:
@@ -159,28 +163,16 @@ static inline void gpio_output_enable(int pin, bool enable) {
   REG(C3_GPIO)[GPIO_OUT_EN] |= (enable ? 1U : 0U) << pin;
 }
 ```
-- `GPIO_OUT_EN` is defined as `8` in line 59
+- `GPIO_OUT_EN` is defined as `8` in line 59, so the offset is 8 register (8 register means 32 byte = 0x0020), so `REG(C3_GPIO)[GPIO_OUT_EN]` will have **0x600004000** as base address and **0x0020** is the offset. Therefor, `REG(C3_GPIO)[GPIO_OUT_EN]` is `GPIO_ENABLE_REG` [table in page 167 of technical reference manual]
+- `GPIO_ENABLE_REG` is ***GPIO output enable register*** [*Register 5.5* in page 171 of technical reference manual]; is use to GPIO output enable register for GPIO0 ~ 21 (Bit0 ~ bit21 are corresponding)
+- The code means line by line:
+  - First, you mask all bit of `GPIO_ENABLE_REG` except the "pin"-th bit (set it to 0)
+  - Then set the "pin"-th bit to 1 (enable GPIO-"pin") if `enable==1`, otherwise set it to 0 (do not enable the "pin"-th GPIO)
 
 ---
-## `wdt_disable()` function
-From line 85 to 99, we have:
-```c
-static inline void wdt_disable(void) {
-  REG(C3_RTCCNTL)[42] = 0x50d83aa1;  // Disable write protection
-  // REG(C3_RTCCNTL)[36] &= BIT(31);    // Disable RTC WDT
-  REG(C3_RTCCNTL)[36] = 0;  // Disable RTC WDT
-  REG(C3_RTCCNTL)[35] = 0;  // Disable
-
-  // bootloader_super_wdt_auto_feed()
-  REG(C3_RTCCNTL)[44] = 0x8F1D312A;
-  REG(C3_RTCCNTL)[43] |= BIT(31);
-  REG(C3_RTCCNTL)[45] = 0;
-
-  REG(C3_TIMERGROUP0)[63] &= ~BIT(9);  // TIMG_REGCLK -> disable TIMG_WDT_CLK
-  REG(C3_TIMERGROUP0)[18] = 0;         // Disable TG0 WDT
-  REG(C3_TIMERGROUP1)[18] = 0;         // Disable TG1 WDT
-}
-```
+### **3. Conclusion**
+- `gpio_output(int pin)` function will connect the peripheral output signal 128 to GPIO-"pin" output and enable the GPIO-"pin"
+    > In case we set `led_pin = LED1` in [main.c](../mdk/examples/blinky/main.c), We will enable GPIO2, which is IO2 pin in ESPC3-32S kit
 
 ---
 ## `gpio_write(int pin, bool value)` function
@@ -191,6 +183,15 @@ static inline void gpio_write(int pin, bool value) {
   REG(C3_GPIO)[1] |= (value ? 1U : 0U) << pin;  // Then set
 }
 ```
+- 1 register = 4 byte = 0x0004, so `REG(C3_GPIO)[1]` is GPIO output register `GPIO_OUT_REG` [table in page 167 of technical reference manual].
+- The code means line by line:
+  - First, you mask all bit of `GPIO_OUT_REG` except the "pin"-th bit (set it to 0). It means keep the output value of all GPIO except for GPIO-"pin" (It will be cleared)
+  - Then set the "pin"-th bit to value: output value of GPIO-"pin" is 1 if `enable==1` and otherwise
+
+---
+### **3. Conclusion**
+- `gpio_write(int pin, bool value)` function will write the GPIO-"pin" value to `value`
+    > In case we set `led_pin = LED1` in [main.c](../mdk/examples/blinky/main.c), We will write the output to GPIO2, which is IO2 in ESPC3-32S kit
 
 ---
 # Why need to add `wdt_disable()`
