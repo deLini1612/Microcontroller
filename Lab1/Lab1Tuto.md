@@ -8,8 +8,8 @@ Lab 01: Blinky
 ---
 
 **In a nutshell:**
-1. Download espressif for esp32c3, check for the toolchain link then modify the toolchain link in [```build.mk```](../mdk/esp32c3/build.mk) to the toolchain link you just finded. Change target architecture in [makefile (examples)](../mdk/examples/Makefile) to esp32c3.
-2. Modify the [```main.c```](../mdk/examples/blinky/main.c) file then run make in [blinky dir](../mdk/examples/blinky/)
+1. Download espressif for esp32c3, check for the toolchain link then modify the toolchain link in [build.mk](../mdk/esp32c3/build.mk) to the toolchain link you just finded. Change target architecture in [makefile (examples)](../mdk/examples/Makefile) to esp32c3.
+2. Modify the [main.c](../mdk/examples/blinky/main.c) file then run make in [blinky dir](../mdk/examples/blinky/)
 3. Run make in [esputil dir](../mdk/esputil/) then flash into ESP32C3
 
 ---
@@ -26,7 +26,7 @@ Lab 01: Blinky
   - [Step 3: Build firmware](#step-3-build-firmware)
   - [Step 4: Flash code into MCU](#step-4-flash-code-into-mcu)
   - [Step 5: Change LED pin back to GPIO and build test board LED](#step-5-change-led-pin-back-to-gpio-and-build-test-board-led)
-- [How ```main.c``` run](#how-mainc-run)
+- [How main.c run](#how-mainc-run)
   - [`gpio_output(int pin)` function](#gpio_outputint-pin-function)
     - [1. `REG(C3_GPIO)[GPIO_OUT_FUNC + pin] = BIT(9) | 128`](#1-regc3_gpiogpio_out_func--pin--bit9--128)
     - [2. `gpio_output_enable(pin, 1)`](#2-gpio_output_enablepin-1)
@@ -92,9 +92,9 @@ To use toolchain, you will need to update your ```PATH``` environment variable.
 ---
 ## Step 3: Build firmware
 1. Modify [makefile (examples)](../mdk/examples/Makefile) first line: set ARCHITECTURES to esp32c3
-2. Go to our project directory: [blinky dir](../mdk/examples/blinky/) and check the MakeFile -> Makefile include ```/home/nplink/Documents/VXL/mdk/esp32c3/build.mk```, so we need to check [```build.mk```](../mdk/esp32c3/build.mk)
-3. Modify [```build.mk```](../mdk/esp32c3/build.mk): set TOOLCHAIN to **riscv32-esp-elf**
-4. Check [```main.c```](../mdk/examples/blinky/main.c) file in project dir (we will dive into understand how the code run [later](#how-mainc-run)) then modify `led_pin` to `3` to blink the LED in NodeMCU ESP32-C3 (instead of GPIO) for testing purpose. 
+2. Go to our project directory: [blinky dir](../mdk/examples/blinky/) and check the MakeFile -> Makefile include ```/home/nplink/Documents/VXL/mdk/esp32c3/build.mk```, so we need to check [build.mk](../mdk/esp32c3/build.mk)
+3. Modify [build.mk](../mdk/esp32c3/build.mk): set TOOLCHAIN to **riscv32-esp-elf**
+4. Check [main.c](../mdk/examples/blinky/main.c) file in project dir (we will dive into understand how the code run [later](#how-mainc-run)) then modify `led_pin` to `3` to blink the LED in NodeMCU ESP32-C3 (instead of GPIO) for testing purpose. 
 5. Disable Watch Dog Timer (wdt) by add `wdt_disable();` line **before for loop** (Why? we will discus [later](#why-need-to-add-wdt_disable))
 6. Run `make` in [blinky dir](../mdk/examples/blinky/). After run `make`, run `ls` to check if it done right (you will see **2 new file** *firmware.bin* and *firmware.elf*)
 
@@ -111,7 +111,7 @@ make flash
 
 ---
 ## Step 5: Change LED pin back to GPIO and build test board LED
-1. In [```main.c```](../mdk/examples/blinky/main.c) file in project dir modify `led_pin` to `LED1`.
+1. In [main.c](../mdk/examples/blinky/main.c) file in project dir modify `led_pin` to `LED1`.
     > LED1 is defined in [mdk.h](../mdk/esp32c3/mdk.h) as 2 in line 213
 2. Check **Pin function definition table** in ESP32-C3-32S specification set up a test board with LED: anode is connected with IO2 ([why IO2?](#how-mainc-run)) and cathode is connected with GND
 3. Run command `make monitor` to see status of LED1
@@ -119,12 +119,12 @@ make flash
 
 ---
 
-# How [```main.c```](../mdk/examples/blinky/main.c) run
+# How [main.c](../mdk/examples/blinky/main.c) run
 It include [mdk.h](../mdk/esp32c3/mdk.h) and it contains bsp (address of I/O registers, some functions, ...).
 
 ---
 ## `gpio_output(int pin)` function
-In [```main.c```](../mdk/examples/blinky/main.c), we call `gpio_output(led_pin)` function, so look up to its definition in [mdk.h](../mdk/esp32c3/mdk.h), then you can see it from lines 130 to 133, we'll understand it line by line
+In [main.c](../mdk/examples/blinky/main.c), we call `gpio_output(led_pin)` function, so look up to its definition in [mdk.h](../mdk/esp32c3/mdk.h), then you can see it from lines 130 to 133, we'll understand it line by line
 ```c
 static inline void gpio_output(int pin) {
   REG(C3_GPIO)[GPIO_OUT_FUNC + pin] = BIT(9) | 128;
