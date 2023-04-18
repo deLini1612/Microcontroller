@@ -100,7 +100,7 @@ To use toolchain, you will need to update your ```PATH``` environment variable.
 3. Modify [build.mk](../mdk/esp32c3/build.mk): set TOOLCHAIN to **riscv32-esp-elf**
 4. Check [main.c](../mdk/examples/blinky/main.c) file in project dir (we will dive into understand how the code run [later](#how-mainc-run)) then modify `led_pin` to `3` to blink the LED in NodeMCU ESP32-C3 (instead of GPIO) for testing purpose. 
 5. Disable Watch Dog Timer (wdt) by add `wdt_disable();` line **before for loop** (Why? we will discus [later](#why-need-to-add-wdt_disable))
-6. Run `make` in [blinky dir](../mdk/examples/blinky/). After run `make`, run `ls` to check if it done right (you will see **2 new file** *firmware.bin* and *firmware.elf*)
+6. Run `make` in [blinky dir](../mdk/examples/blinky/). After run `make`, run `ls` to check if it done right (you will see **2 new files** *firmware.bin* and *firmware.elf*)
 
 ---
 ## Step 4: Flash code into MCU
@@ -144,7 +144,7 @@ static inline void gpio_output(int pin) {
   ```
   1. `x` is your memory address
   2. `(uint32_t *) (x)` is a pointer to `x` memory address, of type **uint32_t** meaning 32 bit unsigned integer
-  3. `volatile` added to tell compile to avoid to optimize.
+  3. `volatile` means a variable that can be change outside the program (Eg: IO register) so we have to declare ALL REGISTER as`volatile` to tell compile to avoid to optimize.
   > So, `REG(x)` mean a pointer point to memory address `x`
 - `BIT(x)` is defined in line 13:
     ```c
