@@ -221,12 +221,12 @@ Our toolchain path:
 <p align="center">
   <img alt="Using find command" src="./Pics/find_toolchain.png" width="82%">
 </p>
-<p style="text-align: center;">Using find command</p>
+<p align="center">Using find command</p>
 
 <p align="center">
   <img alt="By build a sample project" src="./Pics/toolchain_path.png" width="82%">
 </p>
-<p style="text-align: center;">Finding by build a sample project</p>
+<p align="center">Find toolchain by building a sample project</p>
 
 ---
 ## Blinky internal LED and blinky a LED via GPIO pin
@@ -238,7 +238,7 @@ Our toolchain path:
 <p align="center">
   <img alt="make flash and make monitor" src="./Pics/flash_pin2.png" width="82%">
 </p>
-<p style="text-align: center;">Make flash and make monitor</p>
+<p align="center"> Make flash and make monitor </p>
 
 ---
 
@@ -300,4 +300,4 @@ Then we flash `.bin` file to MCU and check the status of GPIO by `esputil monito
 <p align="center">
   <img alt="Capture of compile and flash progress" src="./Pics/bonus_compile_without_make.png" width="82%">
 </p>
-<p style="text-align: center;">Make flash and make monitor</p>
+<p align="center"> Capture of compile and flash progress </p>
