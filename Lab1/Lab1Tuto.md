@@ -256,8 +256,8 @@ Our toolchain path:
      - The output is in the form of an assembler code file (**".s"** or **".asm** file) for each non-assembler input file specified (input files that don’t require compilation are ignored)
 
    - `-c`
-   	- Compile or assemble the source files, but do not link. The linking stage simply is not done.
-   	- The ultimate output is in the form of an object file (**".o"** file) for each source file (unrecognized input files, not requiring compilation or assembly, are ignored)
+     	- Compile or assemble the source files, but do not link. The linking stage simply is not done.
+     	- The ultimate output is in the form of an object file (**".o"** file) for each source file (unrecognized input files, not requiring compilation or assembly, are ignored)
 
 2. When compiling the program, the compiler needs the header files to compile the source codes; the linker needs the libraries to resolve external references from other object files or libraries. The compiler and linker will not find the headers/libraries unless you set the appropriate options, which is not obvious for first-time user.
    - The include-paths are specified via `-Idir` option (or environment variable `CPATH`)
