@@ -1,7 +1,7 @@
 Lab 01: Blinky
 ==============
 
-***Tutorial for lab1 in course microcontroller at HUST***
+***Tutorial for lab1 from course microcontroller at HUST***
 
 **Author:** *deLini1612*
 
