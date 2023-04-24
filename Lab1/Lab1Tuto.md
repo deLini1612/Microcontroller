@@ -1,7 +1,7 @@
 Lab 01: Blinky
 ==============
 
-***Tutorial for lab1 from course microcontroller at HUST***
+***Tutorial for lab1 in course microcontroller at HUST***
 
 **Author:** *deLini1612*
 
@@ -269,7 +269,7 @@ Our toolchain path:
 ### Redo those compile step without using makefile
 1. Compilation: We have `.c` file, to generate `.s` file, the compiler (which is ***riscv32-esp-elf-gcc***) compiles the source code into assembly code for a specific processor. To do so, use `-Idir` and `-S`
    ```bash
-   riscv32-esp-elf-gcc -I/home/nplink/Downloads/test/mdk/esp32c3 -S /home/nplink/Downloads/test/mdk/esp32c3/boot.c main.c
+   riscv32-esp-elf-gcc -I/home/nplink/Documents/VXL/mdk/esp32c3 -S /home/nplink/Documents/VXL/mdk/esp32c3/boot.c main.c
    ```
     >The `-S` option specifies to produce assembly code, instead of object code. The resultant assembly files are "main.s" and "boot.s".
 2. Assembly: The assembler (which is ***riscv32-esp-elf-gcc***) converts the assembly code (`.s` file) into machine code in the object file (`.o` file). Use `-c` option as the following
@@ -279,19 +279,20 @@ Our toolchain path:
     > The resultant object files are "main.o" and "boot.o".
 3. Linker: The linker (which is ***riscv32-esp-elf-ld***) links the object code with the library code to produce file `.elf`. Use `-T` to specify the linker script and `-o` option to set name for the output file
    ```bash
-   riscv32-esp-elf-ld -T/home/nplink/Downloads/test/mdk/esp32c3/link.ld main.o boot.o -o firmware.elf
+   riscv32-esp-elf-ld -T/home/nplink/Documents/VXL/mdk/esp32c3/link.ld main.o boot.o -o firmware.elf
    ```
     > The result is "firmware.elf".
 4. Crete `.bin` file from `.elf` file by ***esputil***
    ```bash
-   /home/nplink/Downloads/test/mdk/esputil/esputil mkbin firmware.elf firmware.bin
+   /home/nplink/Documents/VXL/mdk/esputil/esputil mkbin firmware.elf firmware.bin
    ```
     > The result is "firmware.bin" file, which will be flashed to MCU
 5. Flash `.bin` file to MCU using ***esputil***
    ```bash
    sudo chmod 777 /dev/ttyUSB0
-   /home/nplink/Downloads/test/mdk/esputil/esputil flash 0   firmware.bin
+   /home/nplink/Documents/VXL/mdk/esputil/esputil flash 0   firmware.bin
    ```
+6. You can use `/home/nplink/Documents/VXL/mdk/esputil/esputil monitor` to check the status of LED
   ---
 ## Our result
 This is the capture picture we do the compile step: ".c -> .s -> .o -> .elf -> .bin" without using makefile. After each step, we use `ls` to check the result files.

@@ -1,7 +1,7 @@
 #include <mdk.h>
 
-//static int led_pin = 3;
-static int led_pin = LED1;  // To override: make EXTRA_CFLAGS=-DLED1=5
+static int led_pin = 1;
+//static int led_pin = LED1;  // To override: make EXTRA_CFLAGS=-DLED1=5
 static int led_state = 0;
 
 int main(void) {
