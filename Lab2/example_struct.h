@@ -35,19 +35,19 @@ typedef union
         unsigned pin21:1;
         unsigned invalid: 4;
         unsigned reserved: 6;
-    }
+    };
     uint32_t reg;
 } write_1;
 
 typedef union 
 {
     struct {
-        unsigned out_sel:8
+        unsigned out_sel:8;
         unsigned out_inv_sel:1;
         unsigned oen_sel:1;
         unsigned oen_inv_sel:1;
         unsigned reserved:21;
-    }
+    };
     uint32_t reg;
 } func_out_sel_cfg_format;
 
