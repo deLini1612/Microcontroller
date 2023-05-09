@@ -1,0 +1,8 @@
+GPIO tren ESP32C
+    1 chan: de dua tin hieu ra:
+        C1: peripheral interface (qua giao dien ngoai vi)
+        C2: ghi truc tiep tu GPIO_OUT_DATA_bit_x vao GPIO_FUNC_OUT_SEL (128)
+        GPIO_OUT_REG (trang 170). Thay vi ghi truc tiep vao GPIO_OUT_REG, ghi vao GPIO_OUT_W1TS_TEG / GPIO_OUT_W1RS_TEG
+
+Vi du: Uart0(y van =6), duoc dua vao GPIO(x=5)
+    +) Dat GPIO_FUNC5_OUT_SEL = 6 (6: function cho UART0Tx)
