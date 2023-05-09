@@ -61,28 +61,10 @@ typedef struct
     uint32_t enable;   // 0x0020
     write_1 enable_w1ts;
     write_1 enable_w1tc; // 0x0028
-    uint32_t dummy1[3];   // 2c, 30, 34
-    uint32_t strap;       // 0x0038
-    uint32_t in;          // 0x003c
-    uint32_t dummy2;      // 40
-    uint32_t status;      // 0x0044
+    uint32_t dummy1[7];
     write_1 status_w1ts;
     write_1 status_w1tc;  // 0x004c
-    uint32_t dummy3[3];    // 50, 54, 58
-    uint32_t pcpu_int;     // 0x005c
-    uint32_t pcpu_nmi_int; // 0x0060
-    uint32_t dummy4[4];    // 64, 68, 6c, 70
-    uint32_t pin_n[22];    // 0x0074 to 0x00c8
-    uint32_t dummy5[32];
-    uint32_t status_next;          // 0x014c
-    uint32_t dummy6;               // 150
-    uint32_t func_in_sel_cfg[128]; // 0x0154 to 0x0350
-    uint32_t dummy7[128];
-    func_out_sel_cfg_format func_out_sel_cfg[22]; // 0x0554 to 0x05a8
-    uint32_t dummy8[32];
-    uint32_t clock_gate; // 0x062c
-    uint32_t dummy9[51];
-    uint32_t date; // 0x06fc
+    uint32_t dummy3[427];
 } gpio_matrix;
 
 volatile gpio_matrix *gpio = (volatile gpio_matrix *)(GPIO_BASE);
