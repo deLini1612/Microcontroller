@@ -64,7 +64,9 @@ typedef struct
     uint32_t dummy1[7];
     write_1 status_w1ts;
     write_1 status_w1tc;  // 0x004c
-    uint32_t dummy3[427];
+    uint32_t dummy3[321];
+    func_out_sel_cfg_format func_out_sel_cfg[22]; // 0x0554 to 0x05a8
+    uint32_t dummy8[85];
 } gpio_matrix;
 
 volatile gpio_matrix *gpio = (volatile gpio_matrix *)(GPIO_BASE);
