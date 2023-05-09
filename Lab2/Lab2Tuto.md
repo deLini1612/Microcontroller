@@ -58,7 +58,7 @@ Lab 02: Blink LED base on off-on-off sequence signal from switch
 
 ---
 ## Architecture
-- 2 function
+- 2 functions
   - event(): detects 0-1-0 sequence at input pin
   - main(): calls event() function, then set, clear output to blink LED
 
