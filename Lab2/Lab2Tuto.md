@@ -13,6 +13,19 @@ Lab 02: Blink LED base on off-on-off sequence signal from switch
 
 ---
 # Table of Contents
+- [Requirements](#requirements)
+- [Task 1: Determine addresses of GPIO 1 and GPIO 2 and addresses of related registers](#task-1-determine-addresses-of-gpio-1-and-gpio-2-and-addresses-of-related-registers)
+- [Task 2: Write function to set, clear the value of 1 bit (using MASK)](#task-2-write-function-to-set-clear-the-value-of-1-bit-using-mask)
+- [Task 3: Blink LED base on off-on-off sequence signal from switch](#task-3-blink-led-base-on-off-on-off-sequence-signal-from-switch)
+  - [SPEC and Port Description](#spec-and-port-description)
+    - [SPEC](#spec)
+    - [Port Description](#port-description)
+  - [Architecture](#architecture)
+  - [Algorithm for event() function](#algorithm-for-event-function)
+  - [Explain Code](#explain-code)
+    - [Step 1:](#step-1)
+    - [Step 2:](#step-2)
+    - [Step 3:](#step-3)
 
 
 ---
@@ -51,10 +64,20 @@ Lab 02: Blink LED base on off-on-off sequence signal from switch
 ---
 # Task 3: Blink LED base on off-on-off sequence signal from switch
 
-## SPEC
+## SPEC and Port Description
+---
+### SPEC
 - Input: 1 bit represent state of switch (0 = OFF and 1 = ON)
 - Output: 1 bit represent state of LED (0 = OFF and 1 = ON)
 - Relationship between input and output: System detects sequence OFF-ON-OFF (0-1-0) at the input pin, then set output to blink LED for 1 second
+
+### Port Description
+- IO1 - Input: Connect with a switch
+- IO2 - Output: Connect with anode of a LED
+
+<p align="center">
+  <img src="./Pics/SPEC.png" width="50%">
+</p>
 
 ---
 ## Architecture
@@ -70,8 +93,34 @@ Using 2 type of loop:
 
 > Using 3 loop in N-P-N order to detect (use the first additional N loop in order to verify that in case at the start time, if switch is ON: only when ON-OFF-ON-OFF the LED will blink instead of blink right after ON-OFF)
 
----
-## Source code
+For example: if at start time, switch’s state is **1 (ON)**
+- If we only use 2 loops (as pic 1): The first loop will auto pass. We only need to turn off the switch, the state of switch will be 0. Therefore, the return value of event() will be 1 eventhe input signal is just ***ON-OFF***.
+- To deal with this case (and still correct in case the switch is OFF at start time), we use 3 loops
+
+<p align="center">
+  <img src="./Pics/FlowChart.png" width="55%">
+</p>
 
 ---
-# 6. Result
+## Explain Code
+Source code is provided in [main.c](./main.c) with header file [lib.h](./lib.h)
+### Step 1:
+Declare Register using Struct (in this lab exersice, we just declare gpio and io_mux register for the simplicity)
+
+  ---
+### Step 2:
+1. Set GPIO-n pin as simple output and write:
+   - First, we need to write 128 to coresponding `gpio_func_out_sel` field to set up a GPIO as simple output.
+   - Set `gpio_func_oen_sel` bit to force the output enable to be source from `gpio_enable_reg` register.
+   - Enable GPIO output by setting n-th bit of `gpio_enable`_reg to 1 using `gpio_enable_w1ts_reg`
+   - To write GPIO, set n-th bit of `gpio_out_w1ts_reg` (to write 1) or `gpio_out_w1tc_reg` (to write 0)
+2. Set GPIO-n pin as simple input:
+- Disable GPIO output by clearing n-th bit of `gpio_enable_reg` using `gpio_enable_w1tc_reg`
+- Enable internal pull-down and input by set 7th and 9th bit of `io_mux_gpion_reg` respectively
+    >We enable internal ***pull-down*** in order to set the value of GPIO input from switch is 0 if OFF, then connect other pin of switch to Vcc (gpio value will be 1 if turn switch ON).
+- Filter enabled to remove glitch by setting 15th bit of `io_mux_gpion_reg`
+- To read value, read n-th bit of `gpio_in_reg`
+  
+  ---
+### Step 3:
+Write main.c() bases on the flowchart mentioned in previous slide

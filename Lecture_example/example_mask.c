@@ -1,5 +1,3 @@
-#pragma once
-
 #include <bits/stdint-uintn.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -8,9 +6,9 @@
 #define GPIO_OUT_FUNC 341
 #define REG(x) ((volatile uint32_t *) (x))
 #define MASK(n) ((uint32_t)1U << (n))
-#define pin 5
+#define pin 1
 
-static inline void init_gpio_output()
+static inline void gpio_output()
 {
     REG(GPIO_BASE)[GPIO_OUT_FUNC + pin] = MASK(9) | 128;
     REG(GPIO_BASE)[0x0024] |= MASK(pin);
@@ -23,4 +21,11 @@ static inline void gpio_write(int value)
         REG(GPIO_BASE)[2] |= MASK(pin);
     else
         REG(GPIO_BASE)[3] |= MASK(pin);
+}
+
+int main(void)
+{
+    gpio_output();
+    gpio_write(1); // Blink an LED
+    return 0;
 }
