@@ -4,6 +4,8 @@
         "stdint.h": "c",
         "stdbool.h": "c",
         "stdio.h": "c",
-        "mdk.h": "c"
+        "mdk.h": "c",
+        "stdint-uintn.h": "c",
+        "interrupt.h": "c"
     }
 }
