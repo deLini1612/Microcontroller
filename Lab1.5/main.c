@@ -1,28 +1,28 @@
 #include "lib.h"
 
-static int led_pin = 2;
+static int led_pin = 3;
 static int led_state = 0;
 static int sw_state = 0;
-static int sw_pin = 1;
+static int sw_pin = 9;
 
 int event()
 {
   sw_state = gpio_read(sw_pin);
   while (sw_state)
   {
-    delay_ms(10);
+    delay_ms(1);
     sw_state = gpio_read(sw_pin);
   }
   printf("\n SWITCH: %s", (sw_state) ? "ON" : "OFF");
   while (!sw_state)
   {
-    delay_ms(10);
+    delay_ms(1);
     sw_state = gpio_read(sw_pin);
   }
   printf("\n SWITCH: %s", (sw_state) ? "ON" : "OFF");
   while (sw_state)
   {
-    delay_ms(10);
+    delay_ms(1);
     sw_state = gpio_read(sw_pin);
   }
   printf("\n SWITCH: %s", (sw_state) ? "ON" : "OFF");

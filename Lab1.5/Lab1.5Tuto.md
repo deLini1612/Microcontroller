@@ -1,7 +1,7 @@
-Lab 02: Blink LED base on off-on-off sequence signal from switch
+Lab 1.5: Blink LED base on off-on-off sequence signal from switch
 ==============
 
-***Tutorial for lab2 in course microcontroller at HUST***
+***Tutorial for lab1.5 in course microcontroller at HUST***
 
 **Author:** *deLini1612*
 
@@ -26,6 +26,7 @@ Lab 02: Blink LED base on off-on-off sequence signal from switch
     - [Step 1:](#step-1)
     - [Step 2:](#step-2)
     - [Step 3:](#step-3)
+  - [Our Result](#our-result)
 
 
 ---
@@ -76,7 +77,7 @@ Lab 02: Blink LED base on off-on-off sequence signal from switch
 - IO2 - Output: Connect with anode of a LED
 
 <p align="center">
-  <img src="./Pics/SPEC.png" width="50%">
+  <img src="./PicsVid/SPEC.png" width="50%">
 </p>
 
 ---
@@ -98,7 +99,7 @@ For example: if at start time, switch’s state is **1 (ON)**
 - To deal with this case (and still correct in case the switch is OFF at start time), we use 3 loops
 
 <p align="center">
-  <img src="./Pics/FlowChart.png" width="55%">
+  <img src="./PicsVid/FlowChart.png" width="55%">
 </p>
 
 ---
@@ -123,4 +124,14 @@ Declare Register using Struct (in this lab exersice, we just declare gpio and io
   
   ---
 ### Step 3:
-Write main.c() bases on the flowchart mentioned in previous slide
+Write `main.c()` bases on the flowchart mentioned in previous slide
+
+---
+## Our Result
+We set up our kit like picture below
+
+<p align="center">
+  <img src="./PicsVid/SetUp.jpg" width="75%">
+</p>
+
+Following the tutorial mentioned above, we run the lab assignment successfully and the results can be seen in videos uploaded in [PicsVid dir](./PicsVid)
